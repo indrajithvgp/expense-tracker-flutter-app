@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -64,7 +66,7 @@ class _NewTransactionState extends State<NewTransaction> {
                 // },
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Amount'),
+                decoration: const InputDecoration(labelText: 'Amount'),
                 controller: _amountController,
                 keyboardType: TextInputType.number,
                 onSubmitted: (_) => submitData(),
@@ -76,18 +78,25 @@ class _NewTransactionState extends State<NewTransaction> {
                   Text(_selectedDate == null
                       ? 'No Chosen Date'
                       : 'Chosen Date: ${DateFormat.yMd().format(_selectedDate)}'),
-                  FlatButton(
-                    onPressed: _presentDatePicker,
-                    textColor: Theme.of(context).primaryColor,
-                    child: Text(
-                      'Choose Date',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
+                  Platform.isIOS
+                      ? CupertinoButton(
+                          child: const Text(
+                            'Choose Date',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: _presentDatePicker)
+                      : FlatButton(
+                          onPressed: _presentDatePicker,
+                          textColor: Theme.of(context).primaryColor,
+                          child: const Text(
+                            'Choose Date',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
                 ]),
               ),
               RaisedButton(
-                child: Text('Add Transaction'),
+                child: const Text('Add Transaction'),
                 color: Theme.of(context).primaryColor,
                 textColor: Theme.of(context).textTheme.button.color,
                 onPressed: submitData,
